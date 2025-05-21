@@ -24,21 +24,15 @@ jobs:
                 uses: actions/checkout@v3
 
             -
-                name: Run tests
-                id: run_tests
-                run: ./test.bash
-                continue-on-error: true
-
-            -
-                name: Comment on pull request
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                name: Run Server Tests
                 run: |
-                    PR_NUMBER=${{ github.event.pull_request.number }}
+                    chmod +x ./server/test.bash
+                    bash -x
+                    ./server/test.bash
                     
-                    if [ "${{ steps.run_tests.outcome }}" == "failure" ]; then
-                        LOG_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                        COMMENT="Tests failed. Please check the [logs](${LOG_URL}) for details."
-                    else
-                        COMMENT="All tests passed! Ready to merge."
-                    fi
+            -
+                name: Run Client Tests
+                run: |
+                    chmod +x ./client/test.bash
+                    bash -x
+                    ./client/test.bash

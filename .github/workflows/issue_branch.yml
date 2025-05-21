@@ -2,17 +2,19 @@ name: Create Branch from Issue
 
 on:
     issue_comment:
-        types: [created]
+        types:
+            - created
 
 jobs:
     create_branch:
         
-        if: github.event.comment.body == '/branch'
+        if: ${{ startsWith(github.event.comment.body, '/branch') }}
+        
         runs-on: ubuntu-latest
 
         permissions:
             contents: write
-            issues: read
+            issues: write
 
         steps:
         - 
@@ -25,8 +27,8 @@ jobs:
             env: 
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: |
-                ISSUE_NUMBER=${{ github.event.issue.number }}
-                ISSUE_TITLE=${{ github.event.issue.title }}
+                ISSUE_NUMBER="${{ github.event.issue.number }}"
+                ISSUE_TITLE="${{ github.event.issue.title }}"
 
                 if gh issue view $ISSUE_NUMBER --json labels --jq '.labels[].name' | grep -q 'bug'; then
                   BRANCH_TYPE="bug"
@@ -34,7 +36,16 @@ jobs:
                   BRANCH_TYPE="feature"
                 fi
 
-                BRANCH_NAME="${BRANCH_TYPE}/issue-${ISSUE_NUMBER}"
+                BRANCH_NAME="${BRANCH_TYPE}-${ISSUE_NUMBER}"
+                RAW_BRANCH_NAME="$BRANCH_NAME"
+
+                i=1
+                while git ls-remote --exit-code --heads origin "$BRANCH_NAME" > /dev/null 2>&1; do
+                    BRANCH_NAME="${RAW_BRANCH_NAME}-$i"
+                    i=$((i+1))
+                done
+
+                echo "Branch name: $BRANCH_NAME"
                 echo "target_branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
         -
@@ -43,8 +54,8 @@ jobs:
                 git config user.name "github-actions[bot]"
                 git config user.email "github-actions[bot]@users.noreply.github.com"
 
-                BASE_BRANCH = "main"
-                TARGET_BRANCH = ${{ steps.generate_branch_name.outputs.target_branch }}
+                BASE_BRANCH="main"
+                TARGET_BRANCH=${{ steps.generate_branch_name.outputs.target_branch }}
 
                 git fetch origin $BASE_BRANCH
                 git checkout -b $TARGET_BRANCH origin/$BASE_BRANCH
@@ -55,7 +66,7 @@ jobs:
             env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             run: |
-                ISSUE_NUMBER=${{ github.event.issue.number }}
-                BRANCH_NAME=${{ steps.generate_branch_name.outputs.target_branch }}
+                ISSUE_NUMBER="${{ github.event.issue.number }}"
+                BRANCH_NAME="${{ steps.generate_branch_name.outputs.target_branch }}"
 
-                gh issue comment $ISSUE_NUMBER --body "Branch created: [${BRANCH_NAME}](
+                gh issue comment $ISSUE_NUMBER --body "Branch created: [ ${BRANCH_NAME} ]"
