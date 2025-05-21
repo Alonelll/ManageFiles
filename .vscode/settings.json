@@ -5,6 +5,10 @@
         "editor.indentSize": "tabSize"
     },
     "cSpell.words": [
-        "revisionssicher"
+        "pytest",
+        "venv"
     ],
+    "cSpell.ignorePaths": [
+        "**/requirements.txt"
+    ]
 }
