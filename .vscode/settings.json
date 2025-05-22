@@ -1,0 +1,14 @@
+{
+    "[typescriptreact]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.indentSize": "tabSize"
+    },
+    "cSpell.words": [
+        "pytest",
+        "venv"
+    ],
+    "cSpell.ignorePaths": [
+        "**/requirements.txt"
+    ]
+}
