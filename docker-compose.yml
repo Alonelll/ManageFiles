@@ -1,8 +1,27 @@
+version: '3.9'
+
 services:
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb-local
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: file_management
+      MARIADB_USER: test
+      MARIADB_PASSWORD: password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - backend-net
+
   backend:
     build:
       context: ./server
       dockerfile: Dockerfile
+    container_name: fastapi-backend
     ports:
       - "8000:8000"
     volumes:
@@ -10,3 +29,14 @@ services:
     environment:
       - PYTHONPATH=/app/src
     command: uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - mariadb
+    networks:
+      - backend-net
+
+volumes:
+  mariadb_data:
+
+networks:
+  backend-net:
+    driver: bridge

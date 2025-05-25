@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS file_management;
+CREATE USER IF NOT EXISTS 'test'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON file_management.* TO 'test'@'%';
+FLUSH PRIVILEGES;
