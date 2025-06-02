@@ -17,13 +17,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./",
-    "paths": {
-        "#style/*": ["./style/*"],
-        "#src/*": ["./src/*"]
-    }
+    "noEmit": false,
+    "jsx": "react-jsx"
   },
   "include": [
     "src"
