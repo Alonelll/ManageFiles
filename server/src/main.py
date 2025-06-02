@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from api.endpoints import router as material_router
+from api import apiRouter
 
 app = FastAPI()
 
-
-app.include_router(material_router, prefix="/api")
+app.include_router(apiRouter, prefix="/api")
 
 @app.get("/")
 async def root():
     return {"message": "Hello World test mit Docker refresh"}
+

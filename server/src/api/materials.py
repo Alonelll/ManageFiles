@@ -1,6 +1,4 @@
-from fastapi import APIRouter
-
-router = APIRouter()
+from . import apiRouter as router
 
 @router.get("/materials")
 def get_materials():

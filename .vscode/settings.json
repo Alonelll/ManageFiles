@@ -5,10 +5,13 @@
         "editor.indentSize": "tabSize"
     },
     "cSpell.words": [
+        "PYBIN",
+        "PYPROJECT",
         "pytest",
         "venv"
     ],
     "cSpell.ignorePaths": [
-        "**/requirements.txt"
-    ]
+        "**/pyproject.toml"
+    ],
+    "python.defaultInterpreterPath": "${workspaceFolder}/server/.venv/bin/python"
 }
