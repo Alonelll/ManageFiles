@@ -1,11 +1,40 @@
 services:
+  mariadb:
+    image: mariadb:11.3
+    container_name: demeter-mariadb-debug
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: file_management
+      MARIADB_USER: test
+      MARIADB_PASSWORD: password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - backend-net
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: demeter-backend-debug
+    environment:
+      DB_HOST: demeter-mariadb-debug
+      DB_NAME: file_management
     ports:
       - "8000:8000"
-    environment:
-      - PYTHONPATH=/app/src
+    depends_on:
+      - mariadb
     volumes:
-      - ./server/src:/app/src
+      - ./server/src:/app/src:ro
+    networks:
+      - backend-net
+
+volumes:
+  mariadb_data: 
+
+networks:
+  backend-net:
+    driver: bridge

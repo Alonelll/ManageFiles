@@ -1,15 +1,20 @@
+import os
+import typing
 import mariadb
 import sys
 
-HOST = "mariadb-local"
-PORT = 3306
-DATABASE = "file_management"
+class MariaDb ():
 
-def connect_db(user:str, password:str):
-    return mariadb.connect(
+    CONFIG = {
+        "host": os.environ["DB_HOST"],
+        "port": 3306,
+        "database": os.environ['DB_NAME']
+    }
+
+    @classmethod
+    def connect(cls, user:str, password:str):
+        return mariadb.connect(
         user=user,
         password=password,
-        host=HOST,
-        port=PORT,
-        database=DATABASE
+        **cls.CONFIG
     )

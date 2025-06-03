@@ -5,10 +5,14 @@
         "editor.indentSize": "tabSize"
     },
     "cSpell.words": [
+        "demeter",
+        "mariadb",
+        "mysql",
         "PYBIN",
-        "PYPROJECT",
         "pycache",
+        "PYPROJECT",
         "pytest",
+        "PYTHONPATH",
         "venv"
     ],
     "cSpell.ignorePaths": [
