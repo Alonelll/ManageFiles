@@ -4,6 +4,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONPATH /app/src
+ENV PUBLICPATH /app/public
+ENV INDEXPATH /app/public/index.html
 
 RUN apt-get update
 RUN apt-get install -y libmariadb-dev gcc python3-dev 
