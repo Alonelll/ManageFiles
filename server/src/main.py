@@ -7,5 +7,4 @@ app.include_router(apiRouter, prefix="/api")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World test mit Docker refresh"}
-
+    return {"message": "Hello World test mit Docker refresh. Bazinga"}
