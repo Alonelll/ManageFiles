@@ -2,6 +2,12 @@ FROM python:3.12-slim
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
+ENV DEBIAN_FRONTEND = noninteractive
+
+RUN apt-get update
+RUN apt-get install -y libmariadb-dev gcc python3-dev 
+RUN rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY server/pyproject.toml server/uv.lock ./

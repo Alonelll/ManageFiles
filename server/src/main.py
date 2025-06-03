@@ -1,10 +1,16 @@
-from fastapi import FastAPI
-from api import apiRouter
+
+from api.endpoints import router as material_router
+from src.db.database import connect_db
 
 app = FastAPI()
 
-app.include_router(apiRouter, prefix="/api")
+app.include_router(material_router, prefix="/api")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World test mit Docker refresh. Bazinga"}
+    
+    try:
+        conn = connect_db("test", "password")
+        return {"message": "Database connection successful"}
+    except Exception as e:
+        return {"error": str(e)}
