@@ -5,6 +5,7 @@
         "editor.indentSize": "tabSize"
     },
     "cSpell.words": [
+        "pycache",
         "pytest",
         "venv"
     ],
