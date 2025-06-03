@@ -1,14 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import "./style/index.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./style/index.css";
+import Navigation from "./components/navigation";
+import {BrowserRouter, useRoutes} from "react-router-dom";
+import routes from "./routes";
+
+const AppRoutes = (): React.ReactElement | null => {
+    return useRoutes(routes);
+};
+
+const App = (): React.ReactElement => {
+  return (
+    <BrowserRouter>
+      <Navigation />
+      <AppRoutes />
+    </BrowserRouter>
+  );
+};
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );
+
 root.render(
   <React.StrictMode>
-    <div>
-      { /* structure root */ }
-    </div>
-  </React.StrictMode>
+    <App />
+  </React.StrictMode>,
 );
