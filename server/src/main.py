@@ -10,7 +10,7 @@ app.include_router(material_router, prefix="/api")
 async def root():
     
     try:
-        conn = connect_db("test", "password")
+        conn = connect_db("admin", "admin")
         return {"message": "Database connection successful"}
     except Exception as e:
         return {"error": str(e)}
