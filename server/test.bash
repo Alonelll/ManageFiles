@@ -13,7 +13,7 @@ curl -Ls https://astral.sh/uv/install.sh | bash
 
 export PATH="$HOME/.cargo/bin:$PATH"
 
-uv venv .venv
+uv venv $VENV_DIR
 
 cd $ROOT_DIR
 
@@ -32,8 +32,6 @@ if [ ! -d "$VENV_DIR" ]; then
 fi
 
 echo "Running Python tests in [ $ROOT_DIR/src/test/ ]."
-
-echo $(ls "$VENV_DIR/bin")
 
 "$PYBIN" -m ensurepip --upgrade
 "$PYBIN" -m pip install pip --upgrade
