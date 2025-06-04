@@ -9,7 +9,9 @@ export PYTHONPATH="$SRC_DIR"
 
 curl -Ls https://astral.sh/uv/install.sh | bash
 
-curl -Ls https://astral.sh/uv/install.sh | bash
+apt-get update
+apt-get install -y libmariadb-dev gcc python3-dev
+rm -rf /var/lib/apt/lists/* 
 
 export PATH="$HOME/.cargo/bin:$PATH"
 
