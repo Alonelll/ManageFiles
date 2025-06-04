@@ -4,6 +4,9 @@ from api import apiRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from db import global_db_init
+
+global_db_init()
 
 app = FastAPI()
 

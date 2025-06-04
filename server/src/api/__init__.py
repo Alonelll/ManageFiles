@@ -1,5 +1,5 @@
 from . import login
-from . import files
+from . import file
 
 from .router import apiRouter
 

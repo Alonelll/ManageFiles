@@ -1,12 +1,9 @@
-
-from fastapi import Header, Request, Response, HTTPException
-from fastapi.responses import JSONResponse
-
-from auth.session import getBearerToken
-from db.ConnectDbRoot import ConnectDbRoot
-from util.b64_util import b64utf8Decode
-from auth.password import confirmHash
 from .router import apiRouter
+from auth.password import confirmHash
+from auth.session import getBearerToken
+from db import ConnectDb
+from fastapi import Request, HTTPException
+from util.b64_util import b64utf8Decode
 
 @apiRouter.get('/login')
 async def login(request:Request):
@@ -48,7 +45,7 @@ async def login(request:Request):
             detail = "HTTP Basic token has improper formatting."
         )
     
-    conn = ConnectDbRoot()
+    conn = ConnectDb()
     user = conn.select("users", ["name", "secret"], {"name": username})[0]
     del conn
 

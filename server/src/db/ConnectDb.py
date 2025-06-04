@@ -1,9 +1,12 @@
 import os
-import typing
 import mariadb
-import sys
+
+from typing import Any
 
 class ConnectDb ():
+
+    USERNAME="test"
+    PASSWORD="password"
 
     CONFIG = {
         "host": os.environ["DB_HOST"],
@@ -11,28 +14,60 @@ class ConnectDb ():
         "database": os.environ['DB_NAME']
     }
 
-    _connection:mariadb.Connection
+    _conn:mariadb.Connection
+    _commit_buffer:list[str]
 
-    @property
-    def _getCursor(self) -> mariadb.Cursor:
-        return self._connection.cursor()
-
-    def __init__(self, user:str, password:str):
-        self._connection = mariadb.connect(
-            user=user,
-            password=password,
+    def __init__(self):
+        self._conn = mariadb.connect(
+            user=self.USERNAME,
+            password=self.PASSWORD,
             **self.CONFIG
         )
+        self._commit_buffer = []
 
     def __del__(self):
-        self._connection.close()
+        self._conn.close()
 
-    def select(self, table:str, cols:list[str] = ["*"], crit:dict = None) -> list[dict]:
-        cursor = self._getCursor()
+    def query(self, query:str) -> list[dict[str,Any]]:
+    # Execute a query to the database.
 
-        if not crit:
-            cursor.execute(f"SELECT {cols.join(',')} FROM {table}")
-        else:
-            cursor.execute(f"SELECT {cols.join(',')} FROM {table} WHERE {[f"{k}={v}" for k, v in crit.items()].join(' AND ')}")
+        cursor:mariadb.Cursor = self._conn.cursor()
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+    
+    def execute(self, statement:str) -> None:
 
-        return cursor.fetchall()
+        self._commit_buffer.append(statement)
+        cursor:mariadb.Cursor = self._conn.cursor()
+        cursor.execute(statement)
+        cursor.close()
+
+    def commit(self):
+    # Commit all pending changes
+
+        self._conn.commit()
+        print("Just committed pending changes:\n")
+        print('\n\n'.join(self._commit_buffer))
+        self._commit_buffer = []
+
+    def create_tables(self, schema:dict[str,list[str]]):
+    # Create a table from a schema
+
+        for _name in schema.keys():
+            self.execute(f"CREATE TABLE IF NOT EXISTS {_name} (\n\t{",\n\t".join(schema[_name])}) ENGINE = InnoDB;\n\n")
+
+    def select(self, table:str, cols:list[str] = ["*"], where:list[str] = []) -> list[dict[str,Any]]:
+    # Select rows based on a list of conditions.
+
+        if not where:
+            return self.query(f"SELECT {cols.join(',')} FROM {table}")
+        
+        return self.query(f"SELECT {cols.join(',')} FROM {table} WHERE ({where.join(") AND (")})")
+
+    def criteria_select(self, cursor, table:str, cols:list[str] = ["*"], crit:dict = None) -> list[dict[str,Any]]:
+    # Select rows based on a dict of criteria. Only works for exact matches.
+
+        where = [f"{k} = '{v}'" for k, v in crit.items()] if crit else []
+        return self.select(table, cols, where)

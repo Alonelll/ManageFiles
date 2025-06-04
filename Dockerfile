@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONPATH /app/src
 ENV PUBLICPATH /app/public
 ENV INDEXPATH /app/public/index.html
+ENV FILEMOUNT = /mnt
 
 RUN apt-get update
 RUN apt-get install -y libmariadb-dev gcc python3-dev 
