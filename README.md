@@ -9,7 +9,7 @@ Problem: Dateien werden unstrukturiert in verschiedenen Verzeichnissen abgelegt
 
 Dateien werden unstrukturiert in verschiedenen Verzeichnissen abgelegt.
 
-### Auftrag 
+### Auftrag
 
 <<<<<<< HEAD
 Erstellen Anwendung die es ermöglicht Lernmaterialien systematisch zu speichern, gezielt zu durchsuchen, zu kommentieren und revisionssicher abzulegen.
@@ -18,6 +18,7 @@ Erstellen Anwendung die es ermöglicht Lernmaterialien systematisch zu speichern
 - Dateien über 1 MB: Zu einem definierten Speicherort speichern
 
 ### Unterstützte Dateiformate:
+
 - PDF
 - DOCX
 - JPEG
@@ -49,6 +50,7 @@ Erstellen Anwendung die es ermöglicht Lernmaterialien systematisch zu speichern
 
 Die Materialien können z. B. PDFs, Office-Dokumente oder Quellcodedateien sein. Für die Suche sollen dem Benutzer mindestens sieben Standardsuchbefehle zur Verfü-
 gung stehen. Vorgabe für die Suchbefehle sind:
+
 - Zwei Aggregationen
 - Zwei Joins (Inner)
 - Ein Join, plus eine Aggregation
@@ -58,4 +60,6 @@ gung stehen. Vorgabe für die Suchbefehle sind:
 
 Wenn alles funktioniert solltest du mit einem `docker compose up` den webserver Starten und die API ansprechen können
 Aktuell läuft auf Docker nur der die API die mit einem uvicorn Webserver gehostet wird
-Uvicorn verwendet den `uv` als  dependency manager mehr dazu unter [uv instruction](https://docs.astral.sh/uv/#projects)
+Uvicorn verwendet den `uv` als dependency manager mehr dazu unter [uv instruction](https://docs.astral.sh/uv/#projects)
+
+# Client ReadME by kassim [Readme](./client/README_CLIENT_ANALYSE.md)
