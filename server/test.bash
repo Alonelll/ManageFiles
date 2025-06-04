@@ -33,6 +33,8 @@ fi
 
 echo "Running Python tests in [ $ROOT_DIR/src/test/ ]."
 
+echo $(ls "$VENV_DIR/bin")
+
 "$PYBIN" -m ensurepip --upgrade
 "$PYBIN" -m pip install pip --upgrade
 "$PYBIN" -m pip install .
