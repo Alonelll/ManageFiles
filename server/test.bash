@@ -3,7 +3,7 @@ ROOT_DIR="$(dirname "$(realpath "$0")")"
 VENV_DIR="$ROOT_DIR/.venv"
 SRC_DIR="$ROOT_DIR/src"
 TEST_DIR="$ROOT_DIR/src/test"
-PYBIN="$VENV_DIR/bin/python3"
+PYBIN="$VENV_DIR/bin/python"
 
 export PYTHONPATH="$SRC_DIR"
 
