@@ -11,8 +11,8 @@ global_db_init()
 app = FastAPI()
 
 app.mount(
-    "/public", 
-    StaticFiles(directory = os.environ["PUBLICPATH"], html=False), 
+    "/public",
+    StaticFiles(directory = os.environ["PUBLICPATH"], html=False),
     name = "static"
 )
 
