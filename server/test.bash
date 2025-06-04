@@ -7,6 +7,14 @@ PYBIN="$VENV_DIR/bin/python"
 
 export PYTHONPATH="$SRC_DIR"
 
+curl -Ls https://astral.sh/uv/install.sh | bash
+
+curl -Ls https://astral.sh/uv/install.sh | bash
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+uv venv .venv
+
 cd $ROOT_DIR
 
 curl -sSf https://astral.sh/uv/install.sh | sh # uv
@@ -20,11 +28,14 @@ fi
 
 if [ ! -d "$VENV_DIR" ]; then
     echo "Creating Python virtual environment in [ $VENV_DIR ]."
-    ./mkvenv.sh
+    
 fi
 
 echo "Running Python tests in [ $ROOT_DIR/src/test/ ]."
 
+"$PYBIN" -m ensurepip --upgrade
+"$PYBIN" -m pip install pip --upgrade
+"$PYBIN" -m pip install .
 "$PYBIN" -m pytest "$TEST_DIR"
 
 EXIT_CODE=$?
