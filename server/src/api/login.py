@@ -6,10 +6,11 @@ from auth.session import getBearerToken
 from db.ConnectDbRoot import ConnectDbRoot
 from util.b64_util import b64utf8Decode
 from auth.password import confirmHash
-from . import apiRouter
+from .router import apiRouter
 
 @apiRouter.get('/login')
 async def login(request:Request):
+# Endpoint to get a bearer token from a http basic authorization
 
     authorization = request.headers.get('Authorization')
     xForwarded = request.headers.get('x-forwarded-for')
