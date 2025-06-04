@@ -1,3 +1,6 @@
 **/__pycache__/
 .venv/
 .pytest_cache/
+
+build
+server.egg-info
