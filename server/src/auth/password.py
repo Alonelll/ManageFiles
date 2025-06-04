@@ -36,7 +36,7 @@ def confirmHash(hash:str, password:str) -> bool:
 
     compareHash = hashlib.pbkdf2_hmac(
         hash_name = HASH_NAME,
-        password = password,
+        password = password.encode(),
         salt = saltBytes,
         iterations = ITERATIONS,
         dklen = DKLEN
