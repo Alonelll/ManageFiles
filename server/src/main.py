@@ -8,8 +8,8 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 app.mount(
-    "/public", 
-    StaticFiles(directory = os.environ["PUBLICPATH"], html=False), 
+    "/public",
+    StaticFiles(directory = os.environ["PUBLICPATH"], html=False),
     name = "static"
 )
 

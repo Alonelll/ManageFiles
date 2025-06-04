@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   mariadb:
@@ -10,8 +10,8 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: file_management
-      MARIADB_USER: test
-      MARIADB_PASSWORD: password
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
     volumes:
       - mariadb_data:/var/lib/mysql
     networks:
