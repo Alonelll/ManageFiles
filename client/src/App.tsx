@@ -1,8 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CommentPage from "./pages/CommentPage";
+import Index from "#src/pages";
 
-export default function App() {
-  return (
-    <div>
-      <p>Hello World</p>
-    </div>
-  )
-}
+const App = () => (
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/comments/:materialId" element={<CommentPage />} />
+        </Routes>
+    </BrowserRouter>
+);
+
+export default App;

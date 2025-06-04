@@ -1,13 +1,12 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { FileText, MessageSquare, Upload, Search } from "lucide-react";
-import MaterialCard from "@/components/MaterialCard";
-import FileUpload from "@/components/FileUpload";
+import { FileText, Upload, Search } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "#src/components/ui/card";
+import { Input } from "#src/components/ui/input";
+import { Badge } from "#src/components/ui/badge";
+import FileUpload from "#src/components/FileUpload";
+import MaterialCard from "#src/components/MaterialCard";
+import {Button} from "#src/components/ui/button";
 
 const materials = [
     {
@@ -59,7 +58,7 @@ const Index = () => {
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <h1 className="text-2xl font-bold flex items-center gap-2">
                         <FileText className="h-8 w-8 text-blue-600" />
-                        Lernmaterial Verwaltung
+                        StudyHub
                     </h1>
                     <div className="flex gap-2">
                         <Button
