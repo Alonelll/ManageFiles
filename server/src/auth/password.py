@@ -15,7 +15,7 @@ def createHash(password:str) -> str:
 
     hashBytes = hashlib.pbkdf2_hmac(
         hash_name = HASH_NAME,
-        password = password,
+        password = password.encode(),
         salt = saltBytes,
         iterations = ITERATIONS,
         dklen = DKLEN
