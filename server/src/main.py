@@ -1,16 +1,26 @@
-from fastapi import FastAPI
-from api.endpoints import router as material_router
-from src.db.database import connect_db
+
+import os
+from api import apiRouter
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-app.include_router(material_router, prefix="/api")
+app.mount(
+    "/public", 
+    StaticFiles(directory = os.environ["PUBLICPATH"], html=False), 
+    name = "static"
+)
 
-@app.get("/")
+@app.get('/')
 async def root():
-    
-    try:
-        conn = connect_db("test", "password")
-        return {"message": "Database connection successful"}
-    except Exception as e:
-        return {"error": str(e)}
+    return RedirectResponse("/view")
+
+@app.get("/view")
+async def view():
+    with open(os.environ["INDEXPATH"], "r") as f:
+        htmlContent = f.read()
+    return HTMLResponse(content=htmlContent)
+
+app.include_router(apiRouter, prefix="/api")

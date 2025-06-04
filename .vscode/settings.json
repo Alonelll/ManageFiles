@@ -5,11 +5,32 @@
         "editor.indentSize": "tabSize"
     },
     "cSpell.words": [
+        "decryptor",
+        "demeter",
+        "dklen",
+        "DKLEN",
+        "encryptor",
+        "ensurepip",
+        "INDEXPATH",
+        "libmariadb",
+        "mariadb",
+        "mysql",
+        "noninteractive",
+        "padder",
+        "PKCS",
+        "PUBLICPATH",
+        "PYBIN",
         "pycache",
+        "pyproject",
+        "PYPROJECT",
         "pytest",
+        "PYTHONPATH",
+        "unpadder",
+        "uvicorn",
         "venv"
     ],
     "cSpell.ignorePaths": [
-        "**/requirements.txt"
-    ]
+        "**/pyproject.toml"
+    ],
+    "python.defaultInterpreterPath": "${workspaceFolder}/server/.venv/bin/python"
 }
