@@ -7,65 +7,37 @@ import {
   CardTitle,
 } from "#src/components/ui/card";
 import { Textarea } from "#src/components/ui/textarea";
+import type { Comment } from "#src/types/Comment";
+import type { Metadata as Material } from "#src/types/Metadata";
 import { ArrowLeft, MessageSquare, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-type Material = {
-  title: string;
-  author: string;
-  subject: string;
-  date: string;
-  type: string;
-  size: string;
-};
-
-type Comment = {
-  id: number;
-  author: string;
-  content: string;
-  date: string;
-};
-
-const materials: Record<string, Material> = {
-  "1": {
-    title: "Python Grundlagen",
-    author: "Prof. Schmidt",
-    subject: "Informatik",
-    date: "2024-06-01",
-    type: "PDF",
-    size: "850 KB",
-  },
-};
-
-const comments: Record<string, Comment[]> = {
-  "1": [
-    {
-      id: 1,
-      author: "Anna Müller",
-      content: "Sehr hilfreich! Die Beispiele sind gut erklärt.",
-      date: "2024-06-02",
-    },
-    {
-      id: 2,
-      author: "Max Weber",
-      content: "Könnte man mehr Beispiele für Schleifen hinzufügen?",
-      date: "2024-06-03",
-    },
-  ],
-};
 
 const CommentPage = () => {
   const { materialId } = useParams();
   const navigate = useNavigate();
   const [newComment, setNewComment] = useState("");
 
-  const material = materials[String(materialId)];
-  const materialComments = comments[String(materialId)] || [];
+  // Hier später: Material und Kommentare per API laden
+  // const [material, setMaterial] = useState<Material | null>(null);
+  // const [materialComments, setMaterialComments] = useState<Comment[]>([]);
+
+  // Temporärer Fallback bis API implementiert ist:
+  const material: Material | null = {
+    id: 1,
+    title: "Beispielmaterial",
+    author: "Max Mustermann",
+    subject: "Mathematik",
+    file_name: "",
+    file_type: "",
+    file_size: 0,
+    storage_strategy: "LOCAL",
+  };
+  const materialComments: Comment[] = [];
 
   const handleSubmit = () => {
     if (newComment.trim()) {
-      console.log("Neuer Kommentar:", newComment);
+      // Hier später: Kommentar per API speichern
       setNewComment("");
       alert("Kommentar hinzugefügt!");
     }
