@@ -37,7 +37,6 @@ class ConnectDb ():
     
     def execute(self, statement:str) -> None:
         print(statement, end='\n\n')
-        self._commit_buffer.append(statement)
         cursor:mariadb.Cursor = self._conn.cursor()
         cursor.execute(statement)
         cursor.close()
@@ -57,9 +56,9 @@ class ConnectDb ():
     # Select rows based on a list of conditions.
 
         if not where:
-            return self.query(f"SELECT {cols.join(',')} FROM {table}")
+            return self.query(f"SELECT {','.join(cols)} FROM {table}")
         
-        return self.query(f"SELECT {cols.join(',')} FROM {table} WHERE ({where.join(") AND (")})")
+        return self.query(f"SELECT {','.join(cols)} FROM {table} WHERE ({where.join(") AND (")})")
 
     def criteria_select(self, cursor, table:str, cols:list[str] = ["*"], crit:dict = None) -> list[dict[str,Any]]:
     # Select rows based on a dict of criteria. Only works for exact matches.

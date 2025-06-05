@@ -13,6 +13,7 @@
         "ensurepip",
         "FILEMOUNT",
         "folderpath",
+        "getsizeof",
         "INDEXPATH",
         "libmariadb",
         "mariadb",

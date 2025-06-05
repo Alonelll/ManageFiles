@@ -12,7 +12,7 @@ DB_SCHEMA = {
     ],
     "Files": [
         "id int NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "path TEXT NOT NULL",
+        "name TEXT NOT NULL",
         "folder_id int NOT NULL",
         "data LONGTEXT NOT NULL",
         "CONSTRAINT fk_folder FOREIGN KEY (folder_id) REFERENCES Folders (id) ON DELETE CASCADE ON UPDATE RESTRICT"
@@ -27,10 +27,9 @@ DB_SCHEMA = {
     ]
 }
 
-def global_db_init() -> None:
-    conn = ConnectDb()
-    conn.create_tables(DB_SCHEMA)
-    conn.commit()
-    del conn
+conn = ConnectDb()
+conn.create_tables(DB_SCHEMA)
+conn.commit()
+del conn
 
 

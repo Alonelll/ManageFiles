@@ -1,5 +1,4 @@
 from api import apiRouter
-from db import global_db_init
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
