@@ -9,7 +9,6 @@ from pathlib import Path
 from db.ConnectDb import ConnectDb
 from util.b64_util import b64strEncode
 from .router import apiRouter
-import tempfile
 
 MOUNT = os.environ["FILEMOUNT"]
 
@@ -30,9 +29,9 @@ async def fileGet(request:Request, filepath:str):
             filename=fileName
         )
 
-    conn = ConnectDb("test", "test")
+    conn = ConnectDb()
     
-    result = conn.query(f"SELECT Files.data AS data FROM Files INNER JOIN Folders on Files.FolderID=Folders.ID WHERE Folders.Name={folderName} AND Files.Name={fileName}")
+    result = conn.query(f"SELECT Files.data AS data FROM Files INNER JOIN Folders ON Files.FolderID=Folders.ID WHERE Folders.path='{folderName}' AND Files.name='{fileName}'")
 
     # file does not exist in database
     if not result:

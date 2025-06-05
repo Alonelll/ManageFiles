@@ -15,7 +15,6 @@ class ConnectDb ():
     }
 
     _conn:mariadb.Connection
-    _commit_buffer:list[str]
 
     def __init__(self):
         self._conn = mariadb.connect(
@@ -23,14 +22,13 @@ class ConnectDb ():
             password=self.PASSWORD,
             **self.CONFIG
         )
-        self._commit_buffer = []
 
     def __del__(self):
         self._conn.close()
 
     def query(self, query:str) -> list[dict[str,Any]]:
     # Execute a query to the database.
-
+        print(query, end='\n\n')
         cursor:mariadb.Cursor = self._conn.cursor()
         cursor.execute(query)
         result = cursor.fetchall()
@@ -38,7 +36,7 @@ class ConnectDb ():
         return result
     
     def execute(self, statement:str) -> None:
-
+        print(statement, end='\n\n')
         self._commit_buffer.append(statement)
         cursor:mariadb.Cursor = self._conn.cursor()
         cursor.execute(statement)
@@ -48,12 +46,9 @@ class ConnectDb ():
     # Commit all pending changes
 
         self._conn.commit()
-        print("Just committed pending changes:\n")
-        print('\n\n'.join(self._commit_buffer))
-        self._commit_buffer = []
 
     def create_tables(self, schema:dict[str,list[str]]):
-    # Create a table from a schema
+    # Create a table from a schema.
 
         for _name in schema.keys():
             self.execute(f"CREATE TABLE IF NOT EXISTS {_name} (\n\t{",\n\t".join(schema[_name])}) ENGINE = InnoDB;\n\n")

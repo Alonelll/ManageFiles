@@ -12,6 +12,7 @@
         "encryptor",
         "ensurepip",
         "FILEMOUNT",
+        "folderpath",
         "INDEXPATH",
         "libmariadb",
         "mariadb",
