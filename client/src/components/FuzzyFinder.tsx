@@ -25,7 +25,7 @@ import {
   MessageSquare,
   User,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Material {
   id: number;
@@ -41,18 +41,44 @@ interface Material {
 }
 
 interface FuzzyFinderProps {
-  materials: Material[];
   onCommentClick: (material: Material) => void;
 }
 
-export const FuzzyFinder = ({
-  materials,
-  onCommentClick,
-}: FuzzyFinderProps) => {
+const STORAGE_STRATEGIES = [
+  { value: "LOCAL", label: "Lokaler Speicher" },
+  { value: "DATABASE", label: "Datenbank" },
+  // ggf. weitere Strategien ergänzen
+];
+
+export const FuzzyFinder = ({ onCommentClick }: FuzzyFinderProps) => {
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(
     null
   );
+  const [selectedStrategy, setSelectedStrategy] = useState(
+    STORAGE_STRATEGIES[0].value
+  );
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    // Prüfe, ob die API-URL korrekt ist und der Port nach außen gemappt wurde!
+    // Beispiel für Docker Compose: Der Backend-Service heißt z.B. "backend"
+    // fetch("http://backend:8000/api/materials") // wenn Client auch im Docker-Netz
+    // fetch("http://localhost:8000/api/materials") // wenn Port gemappt und Client lokal läuft
+
+    fetch("http://localhost:8000/api/materials")
+      .then((res) => {
+        if (!res.ok) throw new Error("Fehler beim Laden der Materialien");
+        return res.json();
+      })
+      .then((data) => setMaterials(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   // Fuzzy search implementation
   const filteredMaterials = useMemo(() => {
@@ -86,8 +112,33 @@ export const FuzzyFinder = ({
     return (colors as Record<string, string>)[themengebiet] || colors.Default;
   };
 
+  if (loading) {
+    return <div>Lade Materialien...</div>;
+  }
+  if (error) {
+    return <div className="text-red-500">Fehler: {error}</div>;
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[70vh]">
+      {/* Upload-Bereich mit Strategie-Auswahl */}
+      <div className="mb-4">
+        <label className="block font-medium mb-1">
+          Speicherstrategie wählen:
+        </label>
+        <select
+          className="border rounded px-2 py-1"
+          value={selectedStrategy}
+          onChange={(e) => setSelectedStrategy(e.target.value)}
+        >
+          {STORAGE_STRATEGIES.map((s) => (
+            <option key={s.value} value={s.value}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Left Panel - File/Directory List */}
       <Card className="flex flex-col">
         <CardHeader className="pb-4">
