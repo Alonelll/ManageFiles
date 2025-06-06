@@ -1,0 +1,9 @@
+
+CREATE TABLE IF NOT EXISTS Dirs (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name TEXT NOT NULL,
+    pardir_id int,
+    CONSTRAINT fk_pardir FOREIGN KEY (pardir_id) REFERENCES Dirs (id) 
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
+) ENGINE = InnoDB;

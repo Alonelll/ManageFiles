@@ -27,6 +27,7 @@ services:
       - mariadb
     volumes:
       - ./server/src:/app/src:ro
+      - ./server/sql:/app/sql:ro
     networks:
       - backend-net
 

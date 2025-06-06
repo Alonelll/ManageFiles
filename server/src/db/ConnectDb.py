@@ -1,7 +1,11 @@
-import os
+from pathlib import Path
+from typing import Any
+from errors import PathError
+from util.env_util import env
 import mariadb
 
-from typing import Any
+DB_HOST = env("DB_HOST")
+DB_NAME = env("DB_NAME")
 
 class ConnectDb ():
 
@@ -9,9 +13,9 @@ class ConnectDb ():
     PASSWORD="password"
 
     CONFIG = {
-        "host": os.environ["DB_HOST"],
+        "host": DB_HOST,
         "port": 3306,
-        "database": os.environ['DB_NAME']
+        "database": DB_NAME
     }
 
     _conn:mariadb.Connection
@@ -26,19 +30,17 @@ class ConnectDb ():
     def __del__(self):
         self._conn.close()
 
-    def query(self, query:str) -> list[dict[str,Any]]:
+    def query(self, query:str, *args) -> list[dict[str,Any]]:
     # Execute a query to the database.
-        print(query, end='\n\n')
         cursor:mariadb.Cursor = self._conn.cursor()
-        cursor.execute(query)
+        cursor.execute(query, args)
         result = cursor.fetchall()
         cursor.close()
         return result
     
-    def execute(self, statement:str) -> None:
-        print(statement, end='\n\n')
+    def execute(self, statement:str, *args) -> None:
         cursor:mariadb.Cursor = self._conn.cursor()
-        cursor.execute(statement)
+        cursor.execute(statement, args)
         cursor.close()
 
     def commit(self):
@@ -47,21 +49,20 @@ class ConnectDb ():
         self._conn.commit()
 
     def create_tables(self, schema:dict[str,list[str]]):
-    # Create a table from a schema.
+    # Create tables from a schema.
 
         for _name in schema.keys():
             self.execute(f"CREATE TABLE IF NOT EXISTS {_name} (\n\t{",\n\t".join(schema[_name])}) ENGINE = InnoDB;\n\n")
 
-    def select(self, table:str, cols:list[str] = ["*"], where:list[str] = []) -> list[dict[str,Any]]:
-    # Select rows based on a list of conditions.
+    def resolve_dir(self, dirpath:str) -> int | None:
 
-        if not where:
-            return self.query(f"SELECT {','.join(cols)} FROM {table}")
-        
-        return self.query(f"SELECT {','.join(cols)} FROM {table} WHERE ({where.join(") AND (")})")
+        id_buffer = None
 
-    def criteria_select(self, cursor, table:str, cols:list[str] = ["*"], crit:dict = None) -> list[dict[str,Any]]:
-    # Select rows based on a dict of criteria. Only works for exact matches.
+        for _dir in Path(dirpath).parts:
+            rows = self.query(f"SELECT id FROM Dirs WHERE name='{_dir}' AND pardir_id={id_buffer or "NULL"};")
+            if not rows:
+                raise PathError()
+            id_buffer = rows[0][0]
 
-        where = [f"{k} = '{v}'" for k, v in crit.items()] if crit else []
-        return self.select(table, cols, where)
+        return id_buffer
+

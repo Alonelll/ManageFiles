@@ -15,8 +15,10 @@
         "folderpath",
         "getsizeof",
         "INDEXPATH",
+        "Inno",
         "libmariadb",
         "mariadb",
+        "mountpath",
         "mysql",
         "noninteractive",
         "padder",
@@ -28,6 +30,7 @@
         "PYPROJECT",
         "pytest",
         "PYTHONPATH",
+        "SQLPATH",
         "unpadder",
         "uvicorn",
         "venv"

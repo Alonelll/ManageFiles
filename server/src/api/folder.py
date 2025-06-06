@@ -1,15 +1,14 @@
-import os
-from pathlib import PurePath
-
-from fastapi import Request
-
-from db import ConnectDb
 from .router import apiRouter
+from db import ConnectDb
+from fastapi import Request
+from pathlib import PurePath
+from util.env_util import env
+import os
 
-MOUNT = os.environ["FILEMOUNT"]
+MOUNT = env("FILEMOUNT")
 
 @apiRouter.get("/folder/{folderpath:path}")
-def getFolder(request:Request, folderpath:str):
+def folder_get(request:Request, folderpath:str):
 
     folderpath = os.path.normpath(folderpath)
 
