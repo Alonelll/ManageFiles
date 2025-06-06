@@ -8,7 +8,7 @@ ENV PYTHONPATH /app/src
 ENV PUBLICPATH /app/public
 ENV SQLPATH /app/sql
 ENV INDEXPATH /app/public/index.html
-ENV FILEMOUNT = /mnt
+ENV FILEMOUNT /mnt
 
 RUN apt-get update
 RUN apt-get install -y libmariadb-dev gcc python3-dev 
@@ -27,5 +27,7 @@ RUN .venv/bin/python -m pip install .
 COPY ./server/src /app/src
 COPY ./client/public /app/public
 COPY ./server/sql /app/sql
+
+RUN mkdir -p ${FILEMOUNT}
 
 CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

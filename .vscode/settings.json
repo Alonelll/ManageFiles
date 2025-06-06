@@ -11,6 +11,7 @@
         "DKLEN",
         "encryptor",
         "ensurepip",
+        "fdir",
         "FILEMOUNT",
         "folderpath",
         "getsizeof",

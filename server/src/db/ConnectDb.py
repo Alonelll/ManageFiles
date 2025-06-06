@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any
-from errors import PathError
+from errors.PathError import PathError
 from util.env_util import env
 import mariadb
 
@@ -55,11 +55,14 @@ class ConnectDb ():
             self.execute(f"CREATE TABLE IF NOT EXISTS {_name} (\n\t{",\n\t".join(schema[_name])}) ENGINE = InnoDB;\n\n")
 
     def resolve_dir(self, dirpath:str) -> int | None:
-
+        
         id_buffer = None
 
         for _dir in Path(dirpath).parts:
-            rows = self.query(f"SELECT id FROM Dirs WHERE name='{_dir}' AND pardir_id={id_buffer or "NULL"};")
+            if not id_buffer:
+                rows = self.query("SELECT id FROM Dirs WHERE name=? AND pardir_id IS NULL", _dir)
+            else:
+                rows = self.query("SELECT id FROM Dirs WHERE name=? AND pardir_id=?", _dir, id_buffer)
             if not rows:
                 raise PathError()
             id_buffer = rows[0][0]

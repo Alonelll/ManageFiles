@@ -97,11 +97,18 @@ async def file_post(filepath:str, file:UploadFile=File(...)):
     except PathError:
         raise HTTPException(
             status_code=404,
-            detail="Dieser Ordner wurde noch nicht erstellt."
+            detail="Dieser directory does not exist."
         )
 
     b64 = b64strEncode(content)
 
+    # delete old file
+    if dir_id:
+        conn.execute("DELETE FROM Files WHERE name=? AND dir_id=?", filename, dir_id)
+    else:
+        conn.execute("DELETE FROM Files WHERE name=? AND dir_id IS NULL", filename)
+
+    # insert new file
     conn.execute("INSERT INTO Files (name, data, dir_id) VALUES (?, ?, ?)", filename, b64, dir_id)
     conn.commit()
 
