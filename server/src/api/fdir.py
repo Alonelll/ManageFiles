@@ -4,18 +4,20 @@ from fastapi.responses import PlainTextResponse
 from .router import apiRouter
 from db.ConnectDb import ConnectDb
 from fastapi import HTTPException, Request
-from pathlib import Path, PurePath
+from pathlib import Path
 from util.env_util import env
-import os
+from .shared import MOUNT, dir_id_resolve
 
-MOUNT = env("FILEMOUNT")
+def get_path_args(path:str):
+    dirpath = Path(path)
+    mountpath = MOUNT / dirpath
+
+    return dirpath, mountpath
 
 @apiRouter.get("/dir/{path:path}")
 def dir_get(path:str):
 
-    # deconstruct path
-    dirpath = Path(path)
-    mountpath = MOUNT / dirpath
+    dirpath, mountpath = get_path_args(path)
 
     # check if directory exists in file system
     if not mountpath.exists():
@@ -26,13 +28,7 @@ def dir_get(path:str):
     
     # check if directory exists in database
     conn = ConnectDb()
-    try:
-        par_id = conn.resolve_dir(dirpath)
-    except PathError:
-        raise HTTPException(
-            status_code=404,
-            detail="This directory does not exist"
-        )   
+    par_id = dir_id_resolve(conn, dirpath)
     
     children = []
 
@@ -69,9 +65,7 @@ def dir_get(path:str):
 @apiRouter.post("/dir/{path:path}")
 def dir_post(path:str):
 
-    # deconstruct path
-    dirpath = Path(path)
-    mountpath = MOUNT / dirpath
+    dirpath, mountpath = get_path_args(path)
 
     mountpath.mkdir(parents=True, exist_ok=True)
 

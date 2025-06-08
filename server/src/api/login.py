@@ -2,12 +2,22 @@ from .router import apiRouter
 from auth.password import confirmHash
 from auth.session import getBearerToken
 from db import ConnectDb
-from fastapi import Request, HTTPException
+from fastapi import Request, HTTPException, Response
 from util.b64_util import b64utf8Decode
 
 @apiRouter.get('/login')
-async def login(request:Request):
-# Endpoint to get a bearer token from a http basic authorization
+async def login(request:Request, response:Response):
+# pseudo auth endpoints that just sets a username cookie bc I dont really give a shit
+
+    authorization = request.headers.get('Authorization')
+    print(authorization)
+    conn = ConnectDb()
+    conn.execute("INSERT INTO Users (name, secret) VALUES (?, 'TEST')", authorization)
+    conn.commit()
+    response.set_cookie(key="username", value=authorization)
+
+
+async def _login(request:Request):
 
     authorization = request.headers.get('Authorization')
     xForwarded = request.headers.get('x-forwarded-for')
@@ -20,13 +30,23 @@ async def login(request:Request):
             detail = "Authorization header is missing."
         )
     
-    [format, token] = authorization.split(' ')
+    auth_partial = authorization.split(' ')
+
+    if len(auth_partial) != 2:
+        raise HTTPException(
+            status_code=400,
+            detail="Authorization header has incorrect format."
+        )
+    
+    [format, token] = auth_partial
 
     if format != "Basic":
         raise HTTPException(
             status_code = 403,
             detail = "HTTP Basic auth required."
         )
+    
+    print(token)
     
     if token is None:
         raise HTTPException(
@@ -39,7 +59,7 @@ async def login(request:Request):
     try:
         decoded = b64utf8Decode(authorization)
         [username, password] = decoded.split(':')
-    except:
+    except Exception as e:
         raise HTTPException(
             status_code = 403,
             detail = "HTTP Basic token has improper formatting."

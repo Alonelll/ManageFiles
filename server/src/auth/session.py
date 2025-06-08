@@ -1,4 +1,5 @@
 from base64 import b64decode
+from typing import Collection
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -31,7 +32,7 @@ def getBearerToken(username:str, password:str, ipv4:str):
 
     return b64strEncode(cToken)
 
-def confirmBearerToken(token:str) -> str:
+def confirmBearerToken(token:str) -> Collection[str]:
 
     cToken = b64decode(token)
 
