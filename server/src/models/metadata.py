@@ -1,16 +1,21 @@
 from typing_extensions import Optional
 from base import BaseEntity
-import filetype
 from enum import Enum
+
+
+class StorageStrategy(str, Enum):
+    LOCAL = "LOCAL"
+    DATABASE = "DATABASE"
+    # ggf. weitere Strategien ergänzen
 
 
 class Metadata(BaseEntity):
     id: Optional[int]
     path: Optional[str]
+    title: str
+    author: str
     file_name: str
-    file_type: filetype
-    file_size: bytes
-    subject: str # ToDo: maybe convert this type later to a Subject from SubjectModel
-    storage_strategy: Enum
-
-
+    file_type: str
+    file_size: int  # in Bytes (MySQL: INT UNSIGNED oder BIGINT UNSIGNED für große Dateien)
+    subject: str
+    storage_strategy: StorageStrategy
